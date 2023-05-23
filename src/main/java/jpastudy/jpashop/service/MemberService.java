@@ -43,6 +43,7 @@ public class MemberService {
 		return memberRepository.findOne(memberId);
 	}
 
+	//Dirty Checking을 사용한 update
 	@Transactional
 	public void update(Long id, String name) {
 		Member member = memberRepository.findOne(id);
