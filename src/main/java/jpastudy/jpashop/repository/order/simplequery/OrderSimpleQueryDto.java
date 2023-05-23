@@ -2,9 +2,11 @@ package jpastudy.jpashop.repository.order.simplequery;
 
 import jpastudy.jpashop.domain.Address;
 import jpastudy.jpashop.domain.OrderStatus;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 public class OrderSimpleQueryDto {
     private Long orderId;
     private String name;
