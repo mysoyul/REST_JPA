@@ -6,12 +6,14 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
+@DynamicUpdate
 public class Member {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
