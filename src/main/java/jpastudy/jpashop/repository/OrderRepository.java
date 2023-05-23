@@ -65,8 +65,6 @@ public class OrderRepository {
 		return QMember.member.name.like(nameCond);
 	}
 
-
-
 	public List<Order> findAllJPQL(OrderSearch orderSearch) {
 		String jpql = "select o From Order o join o.member m";
 		boolean isFirstCondition = true;
