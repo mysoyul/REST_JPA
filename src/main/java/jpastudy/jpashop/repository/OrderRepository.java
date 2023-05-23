@@ -5,6 +5,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jpastudy.jpashop.domain.QMember;
+import jpastudy.jpashop.domain.QOrder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -32,9 +36,36 @@ public class OrderRepository {
 	}
 
 	public List<Order> findAll(OrderSearch orderSearch) {
-
-		return null;
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+		QOrder order = QOrder.order;
+		QMember member = QMember.member;
+		List<Order> orderList = queryFactory
+				.select(order)
+				.from(order)
+				.join(order.member, member)
+//				.where(order.status.eq(orderSearch.getOrderStatus()),
+//						member.name.like(orderSearch.getMemberName()))
+				.where(statusEq(orderSearch.getOrderStatus()),
+						nameLike(orderSearch.getMemberName()))
+				.limit(1000)
+				.fetch();
+		return orderList;
 	}
+
+	private BooleanExpression statusEq(OrderStatus statusCond) {
+		if (statusCond == null) {
+			return null;
+		}
+		return QOrder.order.status.eq(statusCond);
+	}
+	private BooleanExpression nameLike(String nameCond) {
+		if (!StringUtils.hasText(nameCond)) {
+			return null;
+		}
+		return QMember.member.name.like(nameCond);
+	}
+
+
 
 	public List<Order> findAllJPQL(OrderSearch orderSearch) {
 		String jpql = "select o From Order o join o.member m";
