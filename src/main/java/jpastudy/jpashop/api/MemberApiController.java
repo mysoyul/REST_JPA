@@ -53,9 +53,10 @@ public class MemberApiController {
     public Result membersV2() {
         List<Member> findMembers = memberService.findMembers();
         //엔티티 -> DTO 변환
-        List<MemberDto> memberDtoList = findMembers.stream()
+        List<MemberDto> memberDtoList = findMembers
+                .stream()
                 .map(m -> new MemberDto(m.getName()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); //List<MemberDto>
         return new Result(memberDtoList);
     }
     @Data
