@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class MemberApiController {
     }
     @Data
     static class CreateMemberRequest {
-        @NotEmpty
+        @NotBlank(message = "Name은 필수 입력항목 입니다.")
         private String name;
     }
 
