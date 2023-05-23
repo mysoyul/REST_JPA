@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
+    Order를 기준으로 연관관계가 @xxToOne 인 Member와 Delivery를  조회하는 컨트롤러 
+ */
 @RestController
 @RequiredArgsConstructor
 public class OrderSimpleApiController {
