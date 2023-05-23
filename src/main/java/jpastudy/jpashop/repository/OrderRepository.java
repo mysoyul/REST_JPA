@@ -7,13 +7,11 @@ import javax.persistence.TypedQuery;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jpastudy.jpashop.domain.QMember;
-import jpastudy.jpashop.domain.QOrder;
+import jpastudy.jpashop.domain.*;
+import jpastudy.jpashop.domain.item.QItem;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import jpastudy.jpashop.domain.Order;
-import jpastudy.jpashop.domain.OrderStatus;
 import jpastudy.jpashop.domain.dto.OrderSearch;
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderRepository {
 	private final EntityManager em;
+	private final JPAQueryFactory queryFactory;
 
 	public void save(Order order) {
 		em.persist(order);
@@ -32,15 +31,45 @@ public class OrderRepository {
 
 	//Order => Member, Delivery
 	public List<Order> findAllWithMemberDelivery() {
-		return em.createQuery(
-						"select o from Order o" +
-								" join fetch o.member m" +
-								" join fetch o.delivery d", Order.class)
-				.getResultList();
+		QOrder order = QOrder.order;
+		QMember member = QMember.member;
+		QDelivery delivery = QDelivery.delivery;
+
+		return queryFactory
+				.select(order)
+				.from(order)
+				.join(order.member, member)
+				.fetchJoin()
+				.join(order.delivery, delivery)
+				.fetchJoin()
+				.fetch();
+
+//		return em.createQuery(
+//						"select o from Order o" +
+//								" join fetch o.member m" +
+//								" join fetch o.delivery d", Order.class)
+//				.getResultList();
 	}
 	//Order => Member, Delivery, OrderItems, Item
 	//HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!
 	public List<Order> findAllWithItem() {
+//		QOrder order = QOrder.order;
+//		QMember member = QMember.member;
+//		QDelivery delivery = QDelivery.delivery;
+//		QOrderItem orderItem = QOrderItem.orderItem;
+//		QItem item = QItem.item;
+//
+//		return queryFactory
+//				.selectFrom(order)
+//				.join(order.member, member).fetchJoin()
+//				.join(order.delivery, delivery).fetchJoin()
+//				.leftJoin(order.orderItems, orderItem)
+//				.leftJoin(orderItem.item, item).fetchJoin()
+//				.distinct()
+//				.offset(0)
+//				.limit(100)
+//				.fetch();
+
 		return em.createQuery(
 						"select distinct o from Order o" +
 								" join fetch o.member m" +
@@ -53,19 +82,32 @@ public class OrderRepository {
 	}
 
 	public List<Order> findAllWithMemberDelivery(int offset, int limit) {
-		return em.createQuery(
-						"select o from Order o" +
-								" join fetch o.member m" +
-								" join fetch o.delivery d", Order.class)
-				.setFirstResult(offset)
-				.setMaxResults(limit)
-				.getResultList();
+//		return em.createQuery(
+//						"select o from Order o" +
+//								" join fetch o.member m" +
+//								" join fetch o.delivery d", Order.class)
+//				.setFirstResult(offset)
+//				.setMaxResults(limit)
+//				.getResultList();
+		QOrder order = QOrder.order;
+		QMember member = QMember.member;
+		QDelivery delivery = QDelivery.delivery;
+
+		return queryFactory
+				.selectFrom(order)
+				.join(order.member, member)
+				.fetchJoin()
+				.join(order.delivery, delivery)
+				.fetchJoin()
+				.offset(offset)
+				.limit(limit)
+				.fetch();
 	}
 
 	public List<Order> findAll(OrderSearch orderSearch) {
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 		QOrder order = QOrder.order;
 		QMember member = QMember.member;
+
 		List<Order> orderList = queryFactory
 				.select(order)
 				.from(order)
