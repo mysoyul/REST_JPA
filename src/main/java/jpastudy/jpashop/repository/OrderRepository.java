@@ -17,11 +17,6 @@ import jpastudy.jpashop.domain.OrderStatus;
 import jpastudy.jpashop.domain.dto.OrderSearch;
 import lombok.RequiredArgsConstructor;
 
-//import com.querydsl.core.types.dsl.BooleanExpression;
-//import com.querydsl.jpa.impl.JPAQueryFactory;
-//import jpastudy.jpashop.domain.QMember;
-//import jpastudy.jpashop.domain.QOrder;
-
 @Repository
 @RequiredArgsConstructor
 public class OrderRepository {

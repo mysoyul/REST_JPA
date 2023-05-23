@@ -47,7 +47,8 @@ tasks.named('test') {
 apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
 //querydsl 추가
-def querydslDir = 'src/main/generated'
+//def querydslDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
 querydsl {
 	library = "com.querydsl:querydsl-apt"
 	jpa = true
