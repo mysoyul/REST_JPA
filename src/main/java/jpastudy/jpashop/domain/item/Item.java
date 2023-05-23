@@ -1,5 +1,6 @@
 package jpastudy.jpashop.domain.item;
 
+import jpastudy.jpashop.exception.BusinessException;
 import jpastudy.jpashop.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +34,7 @@ public abstract class Item {
 	public void removeStock(int quantity) {
 		int restStock = this.stockQuantity - quantity;
 		if (restStock < 0) {
-			throw new NotEnoughStockException("재고 수량이 부족합니다.");
+			throw new BusinessException("재고 수량이 부족합니다.");
 		}
 		this.stockQuantity = restStock;
 	}

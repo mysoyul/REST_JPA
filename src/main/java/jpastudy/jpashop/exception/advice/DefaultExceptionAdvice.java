@@ -18,14 +18,6 @@ import java.util.Map;
 public class DefaultExceptionAdvice {
 	private final Logger LOGGER = LoggerFactory.getLogger(DefaultExceptionAdvice.class);
 
-    @ExceptionHandler(NotEnoughStockException.class)
-    protected ResponseEntity<Object> handleException(NotEnoughStockException e) {
-        Map<String, Object> result = new HashMap<String, Object>();
-        result.put("message", "[안내]\n" + e.getMessage());
-
-        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<Object> handleException(BusinessException e) {
         Map<String, Object> result = new HashMap<String, Object>();
