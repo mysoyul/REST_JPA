@@ -70,7 +70,7 @@ public class OrderQueryRepository {
         //return orderItems.stream().collect(groupingBy(OrderItemQueryDto::getOrderId));
         return orderItems.stream().collect(groupingBy(itemQueryDto -> itemQueryDto.getOrderId()));
     }
-
+   //{1L=[OrderItemQueryDto, OrderItemQueryDto], 2L=[OrderItemQueryDto, OrderItemQueryDto] }
     public List<OrderQueryDto> findAllByDto_optimization() {
         //toOne 코드를 모두 한번에 조회
         List<OrderQueryDto> result = findOrders();
