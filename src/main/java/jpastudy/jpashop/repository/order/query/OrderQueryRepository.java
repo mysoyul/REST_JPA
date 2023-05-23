@@ -10,6 +10,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderQueryRepository {
     private final EntityManager em;
+
     /**
      * 1:N 관계(컬렉션)를 제외한 Order, Member, Delivery를 한번에 조회
      */
@@ -23,4 +24,28 @@ public class OrderQueryRepository {
                 .getResultList();
     } //findOrders
 
+    /**
+     * 1:N 관계인 orderItems 조회
+     */
+    private List<OrderItemQueryDto> findOrderItems(Long orderId) {
+        return em.createQuery(
+                        "select new jpastudy.jpashop.repository.order.query.OrderItemQueryDto(" +
+                                "oi.order.id, i.name, oi.orderPrice, oi.count)" +
+                                " from OrderItem oi" +
+                                " join oi.item i" +
+                                " where oi.order.id = : orderId", OrderItemQueryDto.class)
+                .setParameter("orderId", orderId)
+                .getResultList();
+    } //findOrderItems
+
+    public List<OrderQueryDto> findOrderQueryDtos() {
+        //루트 조회(toOne 코드를 모두 한번에 조회)
+        List<OrderQueryDto> result = findOrders();
+        //루프를 돌면서 컬렉션 추가(추가 쿼리 실행)
+        result.forEach(o -> {
+            List<OrderItemQueryDto> orderItems = findOrderItems(o.getOrderId());
+            o.setOrderItems(orderItems);
+        });
+        return result;
+    } //findOrderQueryDtos
 }
