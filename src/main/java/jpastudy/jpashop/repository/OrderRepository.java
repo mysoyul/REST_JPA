@@ -39,6 +39,7 @@ public class OrderRepository {
 				.getResultList();
 	}
 	//Order => Member, Delivery, OrderItems, Item
+	//HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!
 	public List<Order> findAllWithItem() {
 		return em.createQuery(
 						"select distinct o from Order o" +
@@ -48,6 +49,16 @@ public class OrderRepository {
 								" join fetch oi.item i", Order.class)
 				.setFirstResult(0)
 				.setMaxResults(100)
+				.getResultList();
+	}
+
+	public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+		return em.createQuery(
+						"select o from Order o" +
+								" join fetch o.member m" +
+								" join fetch o.delivery d", Order.class)
+				.setFirstResult(offset)
+				.setMaxResults(limit)
 				.getResultList();
 	}
 
