@@ -1,6 +1,7 @@
 package jpastudy.jpashop.exception.advice;
 
 import jpastudy.jpashop.exception.BusinessException;
+import jpastudy.jpashop.exception.NotEnoughStockException;
 import jpastudy.jpashop.exception.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,14 @@ import java.util.Map;
 @ControllerAdvice
 public class DefaultExceptionAdvice {
 	private final Logger LOGGER = LoggerFactory.getLogger(DefaultExceptionAdvice.class);
+
+    @ExceptionHandler(NotEnoughStockException.class)
+    protected ResponseEntity<Object> handleException(NotEnoughStockException e) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("message", "[안내]\n" + e.getMessage());
+
+        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<Object> handleException(BusinessException e) {
